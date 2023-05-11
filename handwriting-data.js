@@ -5,19 +5,23 @@ const TRAIN_TEST_RATIO = 5 / 6;
 const NUM_TRAIN_ELEMENTS = Math.floor(TRAIN_TEST_RATIO * NUM_DATASET_ELEMENTS);
 const NUM_TEST_ELEMENTS = NUM_DATASET_ELEMENTS - NUM_TRAIN_ELEMENTS;
 
-// images and labels source
-const MNIST_IMAGES_SPRITE_PATH = 'https://storage.googleapis.com/learnjs-data/model-builder/mnist_images.png';
-const MNIST_LABELS_PATH = 'https://storage.googleapis.com/learnjs-data/model-builder/mnist_labels_uint8';
+const MNIST_IMAGES_SPRITE_PATH =
+  'https://storage.googleapis.com/learnjs-data/model-builder/mnist_images.png';
+const MNIST_LABELS_PATH =
+  'https://storage.googleapis.com/learnjs-data/model-builder/mnist_labels_uint8';
 
-// data fetching and manipulation
+/**
+ * a class that fetches the sprited MNIST dataset and returns shuffled batches for data fetching and
+ * manipulation manually.
+ */
 export class MnistData {
   constructor() {
-    this.shuffeldTrainIndex = 0;
-    this.shuffeldTestIndex = 0;
+    this.shuffledTrainIndex = 0;
+    this.shuffledTestIndex = 0;
   }
 
   async load() {
-    // make request for the mnist sprited image
+    // make a request for the MNIST sprited image.
     const img = new Image();
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
@@ -27,24 +31,26 @@ export class MnistData {
         img.width = img.naturalWidth;
         img.height = img.naturalHeight;
 
-        const datasetBytesBuffer = new ArrayBuffer(NUM_DATASET_ELEMENTS * IMAGE_SIZE * 4);
+        const datasetBytesBuffer =
+          new ArrayBuffer(NUM_DATASET_ELEMENTS * IMAGE_SIZE * 4);
 
         const chunkSize = 5000;
-        canvas.width = img.widthl;
+        canvas.width = img.width;
         canvas.height = chunkSize;
 
         for (let i = 0; i < NUM_DATASET_ELEMENTS / chunkSize; i++) {
           const datasetBytesView = new Float32Array(
             datasetBytesBuffer, i * IMAGE_SIZE * chunkSize * 4,
-            IMAGE_SIZE * chunkSize
-          );
+            IMAGE_SIZE * chunkSize);
           ctx.drawImage(
-            img, 0, i * chunkSize, img.width, chunkSize, 0, 0, img.width, chunkSize,
-          );
+            img, 0, i * chunkSize, img.width, chunkSize, 0, 0, img.width,
+            chunkSize);
 
           const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
           for (let j = 0; j < imageData.data.length / 4; j++) {
+            // all channels hold an equal value since the image is grayscale, so
+            // just read the red channel.
             datasetBytesView[j] = imageData.data[j * 4] / 255;
           }
         }
@@ -66,7 +72,7 @@ export class MnistData {
     this.trainIndices = tf.util.createShuffledIndices(NUM_TRAIN_ELEMENTS);
     this.testIndices = tf.util.createShuffledIndices(NUM_TEST_ELEMENTS);
 
-    // Slice the the images and labels into train and test sets.
+    // slice the the images and labels into train and test sets.
     this.trainImages =
       this.datasetImages.slice(0, IMAGE_SIZE * NUM_TRAIN_ELEMENTS);
     this.testImages = this.datasetImages.slice(IMAGE_SIZE * NUM_TRAIN_ELEMENTS);
