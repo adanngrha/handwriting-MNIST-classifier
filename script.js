@@ -75,6 +75,7 @@ function draw(e) {
 function erase() {
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, 280, 280);
+  document.getElementById("result").innerHTML = '-';
 }
 
 function save() {
@@ -84,7 +85,7 @@ function save() {
   var prediction = model.predict(tensor);
   var pIndex = tf.argMax(prediction, 1).dataSync();
 
-  alert(pIndex);
+  document.getElementById("result").innerHTML = pIndex;
 }
 
 function init() {
