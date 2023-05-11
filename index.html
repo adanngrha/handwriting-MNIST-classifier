@@ -1,0 +1,19 @@
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.1.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis"></script>
+
+</head>
+<body>
+    <h1>Handwriting Classifier!</h1>
+    <div style="position: relative;">
+      <canvas id="canvas" width="280" height="280" style="border:8px solid;"></canvas>
+      <img id="canvasimg" style="position: absolute; top: 10%; left: 50%; transform: translateX(-50%); width: 280px; height: 280px; display: none;">
+      <input type="button" value="Classify" id="sb" style="position: absolute; top: 400px; left: 50px;">
+      <input type="button" value="Clear" id="cb" style="position: absolute; top: 400px; left: 150px;">
+    </div>
+    <h1>Your Handwriting is: - </h1>
+    <script src="data.js" type="module"></script>
+    <script src="script.js" type="module"></script>
+</body>
+</html>
