@@ -55,8 +55,8 @@ async function train(model, data) {
 }
 
 function setPosition(e) {
-  pos.x = e.clientX - 100;
-  pos.y = e.clientY - 100;
+  pos.x = e.clientX - 10;
+  pos.y = e.clientY - 50;
 }
 
 function draw(e) {
